@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="dbtjdbc_2.0.1A2_1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/jars/dbtjdbc_2.0.1A2_1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

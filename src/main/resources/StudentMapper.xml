@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gbasedbt.mybatis.StudentMapper">
+
+	<!-- 插入单用户 -->
+	<insert id="addStudent" parameterType="Student" useGeneratedKeys="true">
+		insert into student(username,usertext,userphoto) values
+		(#{userName},#{userText},#{userPhoto})
+	</insert>
+
+	<!-- 批量插入用户,不能使用text/byte/clob/blob字段 -->
+	<insert id="batchaddStudent" useGeneratedKeys="true">
+		insert into student(username)
+		select * from (
+		<foreach collection="list" item="item" separator=" union all ">
+			SELECT
+			'${item.userName}'
+			FROM dual
+		</foreach>
+		)
+	</insert>
+
+	<!-- 批量插入用户, foreach 循环操作, 同样不能使用text/byte/clob/blob字段 -->
+	<insert id="foreachaddStudent" useGeneratedKeys="true">
+		<foreach collection="list" item="item">
+			insert into student(username,usertext,userphoto) values
+			(#{item.userName},#{item.userText},#{item.userPhoto});
+		</foreach>
+	</insert>
+
+	<!-- 查询所有用户  -->
+	<select id="listStudents" resultType="Student">
+		select * from student
+	</select>
+	
+	<!-- 分页查询所有用户  -->
+	<select id="listStudentsBypage" resultType="Student">
+		select skip #{pageNum} first #{pageSize} * from student
+	</select>
+	
+	<!-- 删除用户  -->
+	<delete id="deleteStudent">
+        delete from student where id = #{id}
+    </delete>
+    
+    <!-- 更新用户 -->
+    <update id="updateStudent">
+    	update student set usertext = #{userText} where id = #{id}
+    </update>
+    
+    <!-- 创建表 -->
+    <update id="createStudent">
+    	drop table if exists student;
+    	create table student (id serial not null, username varchar(60), usertext text, userphoto byte, primary key(id));
+    </update>
+
+</mapper>  
